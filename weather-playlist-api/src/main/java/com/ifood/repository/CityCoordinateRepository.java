@@ -3,8 +3,8 @@ package com.ifood.repository;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import com.ifood.domain.cache.TemperatureCache;
+import com.ifood.domain.cache.CityCoordinateCache;
 
 @Repository
-public interface TemperatureRepository extends CrudRepository<TemperatureCache, String> {
+public interface CityCoordinateRepository extends CrudRepository<CityCoordinateCache, String> {
 }

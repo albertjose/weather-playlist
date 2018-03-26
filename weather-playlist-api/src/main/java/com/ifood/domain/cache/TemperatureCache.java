@@ -1,4 +1,4 @@
-package com.ifood.domain;
+package com.ifood.domain.cache;
 
 import java.time.Instant;
 

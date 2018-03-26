@@ -6,8 +6,10 @@ app:
   open-weather-map:
     key: 4cc3a3b4be4831f02cff2257752028e7
     unit: metric #[metric, imperial] Temperature in Kelvin is used by default, no need to use units parameter in API call
-    url: http://api.openweathermap.org/data/2.5/weather?appid=${app.open-weather-map.key}&units=${app.open-weather-map.unit}
+    api-url: http://api.openweathermap.org/data/2.5/weather?appid=${app.open-weather-map.key}&units=${app.open-weather-map.unit}
   spotify:
-    client-id: 03f1769723834cd680011a0ff9d960de
-    client-secret: 6af6d35702904a24b8348968ea166c6e
-    url: https://api.spotify.com/v1/search
+    api-url: https://api.spotify.com/v1
+    auth:
+      url: https://accounts.spotify.com/api
+      client-id: 03f1769723834cd680011a0ff9d960de
+      client-secret: 6af6d35702904a24b8348968ea166c6e

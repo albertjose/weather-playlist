@@ -4,17 +4,18 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import com.ifood.domain.CityWeatherResponse;
+import com.ifood.config.CoreFeignConfiguration;
+import com.ifood.domain.ResultCityWeather;
 
-@FeignClient(url = "${app.open-weather-map.url}", name = "open-weather-map-client")
+@FeignClient(url = "${app.open-weather-map.api-url}", name = "open-weather-map-client", configuration = CoreFeignConfiguration.class)
 public interface OpenWeatherMapClient {
 
 	@GetMapping(value = "?q={city_name}")
-	CityWeatherResponse getWeatherByCityMap(@PathVariable("city_name") String city_name);
+	ResultCityWeather getWeatherByCityMap(@PathVariable("city_name") String city_name);
 
 	@GetMapping(value = "?lat={lat}&lon={lon}")
-	CityWeatherResponse getWeatherByLatLong(@PathVariable("lat") Double lat, @PathVariable("lat") Double lon);
+	ResultCityWeather getWeatherByLatLong(@PathVariable("lat") Double lat, @PathVariable("lat") Double lon);
 
 	@GetMapping(value = "?id={id}")
-	CityWeatherResponse getWeatherById(@PathVariable("id") Long id);
+	ResultCityWeather getWeatherById(@PathVariable("id") Long id);
 }

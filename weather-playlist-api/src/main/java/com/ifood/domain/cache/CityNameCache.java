@@ -1,4 +1,4 @@
-package com.ifood.domain;
+package com.ifood.domain.cache;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;

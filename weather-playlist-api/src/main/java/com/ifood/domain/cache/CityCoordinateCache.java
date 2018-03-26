@@ -1,19 +1,19 @@
-package com.ifood.domain;
+package com.ifood.domain.cache;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
-@RedisHash("cityLatLon")
-public class CityLatLonCache {
+@RedisHash("cityCoordinate")
+public class CityCoordinateCache {
 
 	private String id;
 	@Id
 	private String latLon;
 
-	public CityLatLonCache(String id, Double lat, Double lon) {
+	public CityCoordinateCache(String id, String latLon) {
 		super();
 		this.id = id;
-		this.latLon = String.format("%f:%f", lat, lon);
+		this.latLon = latLon;
 	}
 
 	public String getId() {

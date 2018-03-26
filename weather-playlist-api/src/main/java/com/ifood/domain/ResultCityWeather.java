@@ -4,7 +4,7 @@ import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class CityWeatherResponse {
+public class ResultCityWeather {
 
 	private Integer id;
 	private String name;
