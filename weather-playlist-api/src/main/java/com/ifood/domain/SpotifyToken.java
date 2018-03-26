@@ -19,6 +19,17 @@ public class SpotifyToken implements Serializable {
 	@JsonProperty("expires_in")
 	private Long expiresIn;
 
+	public SpotifyToken() {
+		super();
+	}
+
+	public SpotifyToken(String accessToken, String tokenType, Long expiresIn) {
+		super();
+		this.accessToken = accessToken;
+		this.tokenType = tokenType;
+		this.expiresIn = expiresIn;
+	}
+
 	public String getAccessToken() {
 		return accessToken;
 	}
