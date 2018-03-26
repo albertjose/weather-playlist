@@ -12,11 +12,10 @@ import com.ifood.domain.cache.CityCoordinateCache;
 import com.ifood.domain.cache.CityNameCache;
 import com.ifood.domain.cache.TemperatureCache;
 import com.ifood.exception.OpenWeatherMapResultException;
+import com.ifood.helper.CoordinateHelper;
 
 @Service
 public class WeatherService {
-
-	private static final String CITY_COORDINATE_KEY_PATTERN = "%f:%f";
 
 	OpenWeatherMapClient weatherClient;
 
@@ -51,7 +50,7 @@ public class WeatherService {
 			if (cityCached != null) {
 				response = weatherClient.getWeatherById(Long.valueOf(cityCached.getId()));
 			} else {
-				response = weatherClient.getWeatherByCityMap(cityName);
+				response = weatherClient.getWeatherByCityName(cityName);
 			}
 
 			if (response != null) {
@@ -69,7 +68,7 @@ public class WeatherService {
 
 		// search id in redis
 		CityCoordinateCache cityCached = cityCoordinateCache
-				.find(String.format(CITY_COORDINATE_KEY_PATTERN, latitude, longitude));
+				.find(CoordinateHelper.formatCoordinate(latitude, longitude));
 		if (cityCached != null) {
 			temperature = searchTemperatureCached(cityCached.getId());
 		}
@@ -105,7 +104,7 @@ public class WeatherService {
 			}
 			if (response.getLatitude() != null && response.getLongitude() != null) {
 				cityCoordinateCache.save(new CityCoordinateCache(response.getId().toString(),
-						String.format(CITY_COORDINATE_KEY_PATTERN, response.getLatitude(), response.getLongitude())));
+						CoordinateHelper.formatCoordinate(response.getLatitude(), response.getLongitude())));
 			}
 		}
 	}

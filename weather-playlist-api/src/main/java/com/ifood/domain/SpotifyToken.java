@@ -4,36 +4,43 @@ import java.io.Serializable;
 
 import org.springframework.data.redis.core.RedisHash;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @RedisHash("spotifyToken")
 public class SpotifyToken implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private String access_token;
-	private String token_type;
-	private Long expires_in;
+	@JsonProperty("access_token")
+	private String accessToken;
 
-	public String getAccess_token() {
-		return access_token;
+	@JsonProperty("token_type")
+	private String tokenType;
+
+	@JsonProperty("expires_in")
+	private Long expiresIn;
+
+	public String getAccessToken() {
+		return accessToken;
 	}
 
-	public void setAccess_token(String access_token) {
-		this.access_token = access_token;
+	public void setAccessToken(String access_token) {
+		this.accessToken = access_token;
 	}
 
-	public String getToken_type() {
-		return token_type;
+	public String getTokenType() {
+		return tokenType;
 	}
 
-	public void setToken_type(String token_type) {
-		this.token_type = token_type;
+	public void setTokenType(String token_type) {
+		this.tokenType = token_type;
 	}
 
-	public Long getExpires_in() {
-		return expires_in;
+	public Long getExpiresIn() {
+		return expiresIn;
 	}
 
-	public void setExpires_in(Long expires_in) {
-		this.expires_in = expires_in;
+	public void setExpiresIn(Long expires_in) {
+		this.expiresIn = expires_in;
 	}
 
 }

@@ -45,7 +45,7 @@ public class SpotifyAuthService {
 		spotifyToken = tokenCached != null ? mapperHelper.fromObject(tokenCached, SpotifyToken.class) : generateToken();
 
 		if (spotifyToken == null) {
-			throw new SpotifyAuthException("Cannot authenticate in spotify.");
+			throw new SpotifyAuthException("Sorry. Failed to authenticate on spotify partner.");
 		}
 
 		spotifyTokenCache.save(mapperHelper.fromObject(spotifyToken, SpotifyTokenCache.class));
@@ -58,7 +58,7 @@ public class SpotifyAuthService {
 		String clientCredentials = String.format("%s:%s", clientId, clientSecret);
 		String credentialsHeader = "Basic " + Base64.getEncoder().encodeToString(clientCredentials.getBytes());
 
-		return spotifyAuthClient.generateTokenAcess(credentialsHeader, params);
+		return spotifyAuthClient.generateTokenAccess(credentialsHeader, params);
 	}
 
 }

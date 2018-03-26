@@ -1,16 +1,31 @@
 package com.ifood.domain;
 
+import java.io.Serializable;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class ResultCityWeather {
+public class ResultCityWeather implements Serializable {
+	private static final long serialVersionUID = 1L;
 
-	private Integer id;
+	private Long id;
 	private String name;
 	private Double latitude;
 	private Double longitude;
 	private Double temperature;
+
+	public ResultCityWeather() {
+		super();
+	}
+
+	public ResultCityWeather(Long id, String name, Double latitude, Double longitude, Double temperature) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.latitude = latitude;
+		this.longitude = longitude;
+		this.temperature = temperature;
+	}
 
 	@JsonProperty("coord")
 	private void unpackCoord(Map<String, Double> coord) {
@@ -23,11 +38,11 @@ public class ResultCityWeather {
 		temperature = main.get("temp");
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

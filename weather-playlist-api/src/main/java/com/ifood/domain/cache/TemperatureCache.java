@@ -1,9 +1,10 @@
 package com.ifood.domain.cache;
 
-import java.time.Instant;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
+import org.springframework.data.redis.core.TimeToLive;
 
 @RedisHash("temperatures")
 public class TemperatureCache {
@@ -11,12 +12,13 @@ public class TemperatureCache {
 	@Id
 	private String id;
 	private String temperature;
-	private String dateSync;
+
+	@TimeToLive(unit = TimeUnit.SECONDS)
+	private Long expires_in;
 
 	public TemperatureCache(String id, String temperature) {
 		this.id = id;
 		this.temperature = temperature;
-		this.dateSync = Instant.now().toString();
 	}
 
 	public String getId() {
@@ -35,12 +37,12 @@ public class TemperatureCache {
 		this.temperature = temperature;
 	}
 
-	public String getDateSync() {
-		return dateSync;
+	public Long getExpires_in() {
+		return expires_in;
 	}
 
-	public void setDateSync(String dateSync) {
-		this.dateSync = dateSync;
+	public void setExpires_in(Long expires_in) {
+		this.expires_in = expires_in;
 	}
 
 }

@@ -9,7 +9,7 @@ import com.ifood.domain.ResultCityWeather;
 public class OpenWeatherMapClientFallback implements OpenWeatherMapClient {
 
 	@Override
-	public ResultCityWeather getWeatherByCityMap(String city_name) {
+	public ResultCityWeather getWeatherByCityName(String city_name) {
 		return null;
 	}
 

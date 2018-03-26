@@ -25,18 +25,18 @@ public class WeatherPlaylistRest {
 	@Autowired
 	WeatherPlaylistService weatherPlaylistService;
 
-	@GetMapping(value = "/")
+	@GetMapping(value = "/", params = { "city_name" }, produces = "application/json")
 	@ResponseStatus(HttpStatus.OK)
-	public WeatherPlaylistResponse getPlayListByWeather(@RequestParam(value = "city_name") String cityName)
+	public WeatherPlaylistResponse getPlayListWeatherName(@RequestParam(value = "city_name") String cityName)
 			throws SpotifyResultException, OpenWeatherMapResultException, SpotifyAuthException,
 			WeatherPlaylistException {
 		logger.debug("Searching playlist by cityName=" + cityName);
 		return weatherPlaylistService.getPlayListByWeatherCityName(cityName);
 	}
 
-	@GetMapping
+	@GetMapping(value = "/", params = { "lat", "lon" }, produces = "application/json")
 	@ResponseStatus(HttpStatus.OK)
-	public WeatherPlaylistResponse getPlayListByWeather(@RequestParam(value = "lat") Double latidude,
+	public WeatherPlaylistResponse getPlayListWeatherCoordinate(@RequestParam(value = "lat") Double latidude,
 			@RequestParam(value = "lon") Double longitude) throws SpotifyResultException, OpenWeatherMapResultException,
 			SpotifyAuthException, WeatherPlaylistException {
 		logger.debug(String.format("Searching playlist by coordinates: lat=%s lon=%s", latidude, longitude));

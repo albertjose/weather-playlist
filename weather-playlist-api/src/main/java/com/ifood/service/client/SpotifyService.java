@@ -30,7 +30,7 @@ public class SpotifyService {
 
 	public List<ResultTrack> getTracks(String category) throws SpotifyResultException, SpotifyAuthException {
 		SpotifyToken spotifyToken = spotifyAuthService.getToken();
-		String authorization = String.format("%s %s", spotifyToken.getToken_type(), spotifyToken.getAccess_token());
+		String authorization = String.format("%s %s", spotifyToken.getTokenType(), spotifyToken.getAccessToken());
 
 		List<ResultPlaylistItem> playlistList = getPlaylistByCategory(authorization, category);
 
