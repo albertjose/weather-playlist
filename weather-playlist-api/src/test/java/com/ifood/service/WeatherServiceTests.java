@@ -41,11 +41,11 @@ public class WeatherServiceTests {
 	}
 
 	public void searchWeatherByLatLong_found() throws OpenWeatherMapResultException {
-		weatherService.searchWeatherByLatLong(55.5, 180.0);
+		weatherService.searchWeatherCoordinates(55.5, 180.0);
 	}
 
 	public void searchWeatherByLatLong_notFound() throws OpenWeatherMapResultException {
-		weatherService.searchWeatherByLatLong(55.5, 180.0);
+		weatherService.searchWeatherCoordinates(55.5, 180.0);
 	}
 
 }

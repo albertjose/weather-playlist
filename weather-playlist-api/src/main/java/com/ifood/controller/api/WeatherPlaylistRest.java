@@ -14,6 +14,7 @@ import com.ifood.domain.WeatherPlaylistResponse;
 import com.ifood.exception.OpenWeatherMapResultException;
 import com.ifood.exception.SpotifyAuthException;
 import com.ifood.exception.SpotifyResultException;
+import com.ifood.exception.WeatherPlaylistException;
 import com.ifood.service.WeatherPlaylistService;
 
 @RestController
@@ -27,7 +28,8 @@ public class WeatherPlaylistRest {
 	@GetMapping(value = "/")
 	@ResponseStatus(HttpStatus.OK)
 	public WeatherPlaylistResponse getPlayListByWeather(@RequestParam(value = "city_name") String cityName)
-			throws SpotifyResultException, OpenWeatherMapResultException, SpotifyAuthException {
+			throws SpotifyResultException, OpenWeatherMapResultException, SpotifyAuthException,
+			WeatherPlaylistException {
 		logger.debug("Searching playlist by cityName=" + cityName);
 		return weatherPlaylistService.getPlayListByWeatherCityName(cityName);
 	}
@@ -35,10 +37,10 @@ public class WeatherPlaylistRest {
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
 	public WeatherPlaylistResponse getPlayListByWeather(@RequestParam(value = "lat") Double latidude,
-			@RequestParam(value = "lon") Double longitude)
-			throws SpotifyResultException, OpenWeatherMapResultException, SpotifyAuthException {
+			@RequestParam(value = "lon") Double longitude) throws SpotifyResultException, OpenWeatherMapResultException,
+			SpotifyAuthException, WeatherPlaylistException {
 		logger.debug(String.format("Searching playlist by coordinates: lat=%s lon=%s", latidude, longitude));
-		return weatherPlaylistService.getPlayListByWeatherCityName(latidude, longitude);
+		return weatherPlaylistService.getPlayListByWeatherCoordinates(latidude, longitude);
 	}
 
 }

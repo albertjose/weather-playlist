@@ -2,29 +2,15 @@ package com.ifood.domain;
 
 import java.io.Serializable;
 
-import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
-import org.springframework.data.redis.core.TimeToLive;
 
 @RedisHash("spotifyToken")
 public class SpotifyToken implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	private String id;
 	private String access_token;
 	private String token_type;
-	@TimeToLive
 	private Long expires_in;
-	private String scope;
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
 
 	public String getAccess_token() {
 		return access_token;
@@ -48,14 +34,6 @@ public class SpotifyToken implements Serializable {
 
 	public void setExpires_in(Long expires_in) {
 		this.expires_in = expires_in;
-	}
-
-	public String getScope() {
-		return scope;
-	}
-
-	public void setScope(String scope) {
-		this.scope = scope;
 	}
 
 }

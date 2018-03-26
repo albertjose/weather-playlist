@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 import com.ifood.cache.SpotifyTokenCacheDecorator;
 import com.ifood.client.SpotifyAuthClient;
 import com.ifood.domain.SpotifyToken;
+import com.ifood.domain.cache.SpotifyTokenCache;
 import com.ifood.exception.SpotifyAuthException;
+import com.ifood.helper.MapperHelper;
 
 @Service
 public class SpotifyAuthService {
@@ -26,23 +28,27 @@ public class SpotifyAuthService {
 
 	SpotifyTokenCacheDecorator spotifyTokenCache;
 
+	MapperHelper mapperHelper;
+
 	@Autowired
-	public SpotifyAuthService(SpotifyAuthClient spotifyAuthClient, SpotifyTokenCacheDecorator spotifyTokenCache) {
+	public SpotifyAuthService(SpotifyAuthClient spotifyAuthClient, SpotifyTokenCacheDecorator spotifyTokenCache,
+			MapperHelper mapperHelper) {
 		this.spotifyAuthClient = spotifyAuthClient;
 		this.spotifyTokenCache = spotifyTokenCache;
+		this.mapperHelper = mapperHelper;
 	}
 
 	public SpotifyToken getToken() throws SpotifyAuthException {
-		SpotifyToken spotifyToken = spotifyTokenCache.findOne();
-		if (spotifyToken == null) {
-			spotifyToken = generateToken();
-		}
+		SpotifyToken spotifyToken = null;
+
+		SpotifyTokenCache tokenCached = spotifyTokenCache.findOne();
+		spotifyToken = tokenCached != null ? mapperHelper.fromObject(tokenCached, SpotifyToken.class) : generateToken();
 
 		if (spotifyToken == null) {
 			throw new SpotifyAuthException("Cannot authenticate in spotify.");
 		}
 
-		spotifyTokenCache.save(spotifyToken);
+		spotifyTokenCache.save(mapperHelper.fromObject(spotifyToken, SpotifyTokenCache.class));
 		return spotifyToken;
 	}
 

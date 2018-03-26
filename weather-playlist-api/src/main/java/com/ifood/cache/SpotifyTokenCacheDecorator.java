@@ -3,17 +3,17 @@ package com.ifood.cache;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 
-import com.ifood.domain.SpotifyToken;
+import com.ifood.domain.cache.SpotifyTokenCache;
 
 @Service
-public class SpotifyTokenCacheDecorator extends CacheDecorator<SpotifyToken> {
+public class SpotifyTokenCacheDecorator extends CacheDecorator<SpotifyTokenCache> {
 
-	protected SpotifyTokenCacheDecorator(CrudRepository<SpotifyToken, String> repository) {
+	protected SpotifyTokenCacheDecorator(CrudRepository<SpotifyTokenCache, String> repository) {
 		super(repository);
 	}
 
-	public SpotifyToken findOne() {
-		Iterable<SpotifyToken> spotifyToken = repository.findAll();
+	public SpotifyTokenCache findOne() {
+		Iterable<SpotifyTokenCache> spotifyToken = repository.findAll();
 		if (spotifyToken.iterator().hasNext()) {
 			return spotifyToken.iterator().next();
 		}

@@ -58,13 +58,13 @@ public class WeatherService {
 				cacheValues(response);
 				temperature = response.getTemperature();
 			} else {
-				throw new OpenWeatherMapResultException("Cannot retrieve current temperature for your city");
+				throw new OpenWeatherMapResultException("Sorry. Cannot retrieve current temperature for your city.");
 			}
 		}
 		return temperature;
 	}
 
-	public Double searchWeatherByLatLong(Double latitude, Double longitude) throws OpenWeatherMapResultException {
+	public Double searchWeatherCoordinates(Double latitude, Double longitude) throws OpenWeatherMapResultException {
 		Double temperature = null;
 
 		// search id in redis
@@ -87,7 +87,8 @@ public class WeatherService {
 				cacheValues(response);
 				temperature = response.getTemperature();
 			} else {
-				throw new OpenWeatherMapResultException("Cannot retrieve current temperature for your city");
+				throw new OpenWeatherMapResultException(
+						"Sorry. Cannot retrieve current temperature for your location.");
 			}
 		}
 		return temperature;
