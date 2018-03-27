@@ -40,7 +40,7 @@ public class WeatherService {
 		// search id in redis
 		CityNameCache cityCached = cityNameCache.find(cityName);
 		if (cityCached != null) {
-			temperature = searchTemperatureCached(cityCached.getId());
+			temperature = searchTemperatureCached(cityCached.getCityId());
 		}
 
 		// not found in redis -> search in api
@@ -48,7 +48,7 @@ public class WeatherService {
 			ResultCityWeather response = null;
 
 			if (cityCached != null) {
-				response = weatherClient.getWeatherById(Long.valueOf(cityCached.getId()));
+				response = weatherClient.getWeatherById(Long.valueOf(cityCached.getCityId()));
 			} else {
 				response = weatherClient.getWeatherByCityName(cityName);
 			}
@@ -70,14 +70,14 @@ public class WeatherService {
 		CityCoordinateCache cityCached = cityCoordinateCache
 				.find(CoordinateHelper.formatCoordinate(latitude, longitude));
 		if (cityCached != null) {
-			temperature = searchTemperatureCached(cityCached.getId());
+			temperature = searchTemperatureCached(cityCached.getCityId());
 		}
 
 		// not found in redis -> search in api
 		if (temperature == null) {
 			ResultCityWeather response = null;
 			if (cityCached != null) {
-				response = weatherClient.getWeatherById(Long.valueOf(cityCached.getId()));
+				response = weatherClient.getWeatherById(Long.valueOf(cityCached.getCityId()));
 			} else {
 				response = weatherClient.getWeatherByLatLong(latitude, longitude);
 			}

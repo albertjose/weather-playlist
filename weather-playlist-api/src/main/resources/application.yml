@@ -3,7 +3,7 @@ app:
     temperature-values: 600 # time to live in seconds
   open-weather-map:
     key: 4cc3a3b4be4831f02cff2257752028e7
-    unit: metric #[metric, imperial] Temperature in Kelvin is used by default, no need to use units parameter in API call
+    unit: metric #[metric, imperial] kelvin is used by default
     api-url: http://api.openweathermap.org/data/2.5/weather?appid=${app.open-weather-map.key}&units=${app.open-weather-map.unit}
   spotify:
     api-url: https://api.spotify.com/v1

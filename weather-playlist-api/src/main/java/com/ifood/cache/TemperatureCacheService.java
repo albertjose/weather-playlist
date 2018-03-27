@@ -18,7 +18,7 @@ public class TemperatureCacheService extends CacheDecorator<TemperatureCache> {
 
 	@Override
 	public void save(TemperatureCache cache) {
-		cache.setExpires_in(temperatureCacheTimeToExpire);
+		cache.setExpiresIn(temperatureCacheTimeToExpire);
 		super.save(cache);
 	}
 

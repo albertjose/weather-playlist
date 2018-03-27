@@ -42,14 +42,19 @@ public class SpotifyAuthService {
 		SpotifyToken spotifyToken = null;
 
 		SpotifyTokenCache tokenCached = spotifyTokenCache.findOne();
-		spotifyToken = tokenCached != null ? mapperHelper.fromObject(tokenCached, SpotifyToken.class) : generateToken();
 
-		if (spotifyToken == null) {
-			throw new SpotifyAuthException("Sorry. Failed to authenticate on spotify partner.");
+		if (tokenCached != null) {
+			return mapperHelper.fromObject(tokenCached, SpotifyToken.class);
+		} else {
+			spotifyToken = generateToken();
+
+			if (spotifyToken == null) {
+				throw new SpotifyAuthException("Sorry. Failed to authenticate on spotify partner.");
+			}
+			spotifyTokenCache.save(mapperHelper.fromObject(spotifyToken, SpotifyTokenCache.class));
+
+			return spotifyToken;
 		}
-
-		spotifyTokenCache.save(mapperHelper.fromObject(spotifyToken, SpotifyTokenCache.class));
-		return spotifyToken;
 	}
 
 	private SpotifyToken generateToken() {

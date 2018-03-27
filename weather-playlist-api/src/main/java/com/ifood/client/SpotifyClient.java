@@ -7,12 +7,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.ifood.client.fallback.SpotifyClientFallback;
 import com.ifood.config.CoreFeignConfiguration;
 import com.ifood.domain.ResultPlaylistCategory;
 import com.ifood.domain.ResultTrackPlaylist;
 
-@FeignClient(url = "${app.spotify.api-url}", name = "spotify-client", fallback = SpotifyClientFallback.class, configuration = CoreFeignConfiguration.class)
+@FeignClient(url = "${app.spotify.api-url}", name = "spotify-client", configuration = CoreFeignConfiguration.class)
 public interface SpotifyClient {
 
 	@GetMapping(value = "/browse/categories/{categoryId}/playlists", produces = MediaType.APPLICATION_JSON_VALUE)

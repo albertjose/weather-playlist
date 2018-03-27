@@ -1,27 +1,30 @@
 package com.ifood.domain.cache;
 
+import java.io.Serializable;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
 @RedisHash("cityCoordinate")
-public class CityCoordinateCache {
+public class CityCoordinateCache implements Serializable {
+	private static final long serialVersionUID = 1L;
 
-	private String id;
+	private String cityId;
 	@Id
 	private String latLon;
 
-	public CityCoordinateCache(String id, String latLon) {
+	public CityCoordinateCache(String cityId, String latLon) {
 		super();
-		this.id = id;
+		this.cityId = cityId;
 		this.latLon = latLon;
 	}
 
-	public String getId() {
-		return id;
+	public String getCityId() {
+		return cityId;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setCityId(String cityId) {
+		this.cityId = cityId;
 	}
 
 	public String getLatLon() {

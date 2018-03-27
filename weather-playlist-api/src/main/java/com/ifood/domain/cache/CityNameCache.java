@@ -1,26 +1,29 @@
 package com.ifood.domain.cache;
 
+import java.io.Serializable;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
 @RedisHash("cityName")
-public class CityNameCache {
+public class CityNameCache implements Serializable {
+	private static final long serialVersionUID = 1L;
 
-	private String id;
+	private String cityId;
 	@Id
 	private String name;
 
-	public CityNameCache(String id, String name) {
-		this.id = id;
+	public CityNameCache(String cityId, String name) {
+		this.cityId = cityId;
 		this.name = name;
 	}
 
-	public String getId() {
-		return id;
+	public String getCityId() {
+		return cityId;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setCityId(String cityId) {
+		this.cityId = cityId;
 	}
 
 	public String getName() {

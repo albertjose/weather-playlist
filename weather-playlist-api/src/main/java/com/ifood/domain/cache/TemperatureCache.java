@@ -1,5 +1,6 @@
 package com.ifood.domain.cache;
 
+import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.data.annotation.Id;
@@ -7,26 +8,27 @@ import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.TimeToLive;
 
 @RedisHash("temperatures")
-public class TemperatureCache {
+public class TemperatureCache implements Serializable {
+	private static final long serialVersionUID = 1L;
 
 	@Id
-	private String id;
+	private String cityId;
 	private String temperature;
 
 	@TimeToLive(unit = TimeUnit.SECONDS)
-	private Long expires_in;
+	private Long expiresIn;
 
-	public TemperatureCache(String id, String temperature) {
-		this.id = id;
+	public TemperatureCache(String cityId, String temperature) {
+		this.cityId = cityId;
 		this.temperature = temperature;
 	}
 
-	public String getId() {
-		return id;
+	public String getCityId() {
+		return cityId;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setCityId(String cityId) {
+		this.cityId = cityId;
 	}
 
 	public String getTemperature() {
@@ -37,12 +39,12 @@ public class TemperatureCache {
 		this.temperature = temperature;
 	}
 
-	public Long getExpires_in() {
-		return expires_in;
+	public Long getExpiresIn() {
+		return expiresIn;
 	}
 
-	public void setExpires_in(Long expires_in) {
-		this.expires_in = expires_in;
+	public void setExpiresIn(Long expiresIn) {
+		this.expiresIn = expiresIn;
 	}
 
 }

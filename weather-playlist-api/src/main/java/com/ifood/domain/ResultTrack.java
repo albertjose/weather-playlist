@@ -1,7 +1,20 @@
 package com.ifood.domain;
 
-public class ResultTrack {
+import java.io.Serializable;
+
+public class ResultTrack implements Serializable {
+	private static final long serialVersionUID = 1L;
+
 	private ResultTrackItem track;
+
+	public ResultTrack() {
+		super();
+	}
+
+	public ResultTrack(ResultTrackItem track) {
+		super();
+		this.track = track;
+	}
 
 	public ResultTrackItem getTrack() {
 		return track;
@@ -9,10 +22,6 @@ public class ResultTrack {
 
 	public void setTrack(ResultTrackItem track) {
 		this.track = track;
-	}
-
-	public String getName() {
-		return track != null ? track.getName() : null;
 	}
 
 }
