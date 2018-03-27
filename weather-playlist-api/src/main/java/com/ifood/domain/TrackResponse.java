@@ -1,6 +1,6 @@
 package com.ifood.domain;
 
-public class Track {
+public class TrackResponse {
 	private String name;
 
 	public String getName() {

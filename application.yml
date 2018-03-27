@@ -1,8 +1,0 @@
-weather-api:
-    open-weather-map:
-        key: 4cc3a3b4be4831f02cff2257752028e7
-        url: http://api.openweathermap.org/data/2.5/forecast
-    spotify:
-        client-id: 03f1769723834cd680011a0ff9d960de
-        client-secret: 6af6d35702904a24b8348968ea166c6e
-        url: https://api.spotify.com/v1/search

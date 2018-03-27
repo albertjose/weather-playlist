@@ -1,0 +1,11 @@
+db:
+  image: redis:3.0.3
+  hostname: redis
+  ports:
+    - "6379:6379"
+weather-playlist-api:
+    build: weather-playlist-api
+    links:
+      - "db:redis"
+    ports:
+      - "8080:8080"

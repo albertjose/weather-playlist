@@ -44,7 +44,7 @@ public class SpotifyAuthCredentialsFlowService implements SpotifyAuthService {
 	 * @return
 	 * @throws SpotifyAuthException
 	 */
-	@Autowired
+	@Override
 	public SpotifyToken getToken() throws SpotifyAuthException {
 		SpotifyToken spotifyToken = null;
 

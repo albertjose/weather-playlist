@@ -1,4 +1,4 @@
-package com.ifood.service;
+package com.ifood.service.client;
 
 import static org.mockito.Mockito.when;
 

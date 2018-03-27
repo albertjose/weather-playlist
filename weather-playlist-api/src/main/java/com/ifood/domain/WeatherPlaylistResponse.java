@@ -4,7 +4,7 @@ import java.util.List;
 
 public class WeatherPlaylistResponse {
 	private Double currentTemperature;
-	private List<Track> tracks;
+	private List<TrackResponse> tracks;
 
 	public Double getCurrentTemperature() {
 		return currentTemperature;
@@ -14,11 +14,11 @@ public class WeatherPlaylistResponse {
 		this.currentTemperature = currentTemperature;
 	}
 
-	public List<Track> getTracks() {
+	public List<TrackResponse> getTracks() {
 		return tracks;
 	}
 
-	public void setTracks(List<Track> tracks) {
+	public void setTracks(List<TrackResponse> tracks) {
 		this.tracks = tracks;
 	}
 

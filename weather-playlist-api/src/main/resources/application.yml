@@ -1,3 +1,9 @@
+server:
+  port: 8080
+  
+info:
+  component: Weather Playlist API
+
 app:
   cache:
     temperature-values: 600 # time to live in seconds
@@ -11,9 +17,10 @@ app:
       url: https://accounts.spotify.com/api
       client-id: 03f1769723834cd680011a0ff9d960de
       client-secret: 6af6d35702904a24b8348968ea166c6e
+      
 spring:
   redis:
-    host: localhost
+    host: redis
     port: 6379
 feign:
   hystrix:
@@ -21,3 +28,19 @@ feign:
 hystrix:
     command:
       default.execution.isolation.thread.timeoutInMilliseconds: 3000
+      
+      
+---
+# For deployment in Docker containers
+spring:
+  profiles: docker
+
+server:
+  port: 8080
+
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    serviceUrl:
+      defaultZone: http://discovery:8761/eureka/

@@ -1,4 +1,4 @@
-package com.ifood.controller.api;
+package com.ifood.controller.rest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +24,7 @@ public class WeatherPlaylistRestController implements WeatherPlaylistController 
 	private static final Logger logger = LoggerFactory.getLogger(WeatherPlaylistRestController.class);
 
 	@Autowired
-	OpenWeatherSpotifyService weatherPlaylistService;
+	OpenWeatherSpotifyService openWeatherSpotifyService;
 
 	@GetMapping(value = "/", params = { "city_name" }, produces = "application/json")
 	@ResponseStatus(HttpStatus.OK)
@@ -33,7 +33,7 @@ public class WeatherPlaylistRestController implements WeatherPlaylistController 
 			throws SpotifyResultException, OpenWeatherMapResultException, SpotifyAuthException,
 			WeatherPlaylistException {
 		logger.debug("Searching playlist by cityName=" + cityName);
-		return weatherPlaylistService.getPlayListByWeatherCityName(cityName);
+		return openWeatherSpotifyService.getPlayListByWeatherCityName(cityName);
 	}
 
 	@GetMapping(value = "/", params = { "lat", "lon" }, produces = "application/json")
@@ -43,7 +43,7 @@ public class WeatherPlaylistRestController implements WeatherPlaylistController 
 			@RequestParam(value = "lon") Double longitude) throws SpotifyResultException, OpenWeatherMapResultException,
 			SpotifyAuthException, WeatherPlaylistException {
 		logger.debug(String.format("Searching playlist by coordinates: lat=%s lon=%s", latidude, longitude));
-		return weatherPlaylistService.getPlayListByWeatherCoordinates(latidude, longitude);
+		return openWeatherSpotifyService.getPlayListByWeatherCoordinates(latidude, longitude);
 	}
 
 }

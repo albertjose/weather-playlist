@@ -6,7 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 
 import com.ifood.domain.cache.PlaylistGenreCache;
-import com.ifood.repository.PlaylistGenreRepository;
+import com.ifood.repository.spotify.PlaylistGenreRepository;
 
 @Service
 public class PlaylistGenreCacheDecorator extends CacheDecorator<PlaylistGenreCache> {

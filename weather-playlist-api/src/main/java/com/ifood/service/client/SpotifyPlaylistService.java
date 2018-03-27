@@ -42,42 +42,22 @@ public class SpotifyPlaylistService implements SpotifyService {
 	}
 
 	@Override
-	public List<ResultTrack> getTracks(String category) throws SpotifyResultException, SpotifyAuthException {
-		String playListId = getRandomPlaylistByCategory(category);
-		return getTracksByPlaylist(playListId);
-
-	}
-
-	private String getRandomPlaylistByCategory(String category) throws SpotifyResultException, SpotifyAuthException {
-		Random r = new Random();
-		// find in redis
+	public ResultPlaylistItem getRandomPlaylistByCategory(String category)
+			throws SpotifyResultException, SpotifyAuthException {
+		// find random playlist in redis
 		PlaylistGenreCache cachedCategory = playlistGenreCache.findOneByGenre(category);
 		if (cachedCategory != null) {
-			return cachedCategory.getPlaylistId();
+			return new ResultPlaylistItem(cachedCategory.getPlaylistId());
 		} else {
+			Random randow = new Random();
 			List<ResultPlaylistItem> resultPlayList = getPlaylistByCategory(category);
-			ResultPlaylistItem playList = resultPlayList.get(r.nextInt(resultPlayList.size()));
-			return playList.getId();
+			// sportify return list of playlist, get one here
+			return resultPlayList.get(randow.nextInt(resultPlayList.size()));
 		}
 	}
 
-	private List<ResultPlaylistItem> getPlaylistByCategory(String category)
-			throws SpotifyResultException, SpotifyAuthException {
-		ResultPlaylistCategory playListByCategory = spotifyClient.getPlaylistByCategory(getAuthorization(), category);
-		if (playListByCategory == null || playListByCategory.getPlaylists() == null
-				|| playListByCategory.getPlaylists().getItems() == null
-				|| playListByCategory.getPlaylists().getItems().isEmpty()) {
-			throw new SpotifyResultException("Sorry. We did not find playlists for the current category.");
-		} else {
-			// cache values in redis
-			List<PlaylistGenreCache> list = playListByCategory.getPlaylists().getItems().stream()
-					.map(e -> new PlaylistGenreCache(category, e.getId())).collect(Collectors.toList());
-			playlistGenreCache.saveAll(list);
-			return playListByCategory.getPlaylists().getItems();
-		}
-	}
-
-	private List<ResultTrack> getTracksByPlaylist(String playlistId)
+	@Override
+	public List<ResultTrack> getTracksByPlaylist(String playlistId)
 			throws SpotifyResultException, SpotifyAuthException {
 		List<TrackPlaylistCache> cachedTracks = trackPlaylistCache.findByPlaylistId(playlistId);
 		if (cachedTracks != null && !cachedTracks.isEmpty()) {
@@ -98,6 +78,22 @@ public class SpotifyPlaylistService implements SpotifyService {
 
 				return trackResult.getItems();
 			}
+		}
+	}
+
+	private List<ResultPlaylistItem> getPlaylistByCategory(String category)
+			throws SpotifyResultException, SpotifyAuthException {
+		ResultPlaylistCategory playListByCategory = spotifyClient.getPlaylistByCategory(getAuthorization(), category);
+		if (playListByCategory == null || playListByCategory.getPlaylists() == null
+				|| playListByCategory.getPlaylists().getItems() == null
+				|| playListByCategory.getPlaylists().getItems().isEmpty()) {
+			throw new SpotifyResultException("Sorry. We did not find playlists for the current category.");
+		} else {
+			// cache values in redis
+			List<PlaylistGenreCache> list = playListByCategory.getPlaylists().getItems().stream()
+					.map(e -> new PlaylistGenreCache(category, e.getId())).collect(Collectors.toList());
+			playlistGenreCache.saveAll(list);
+			return playListByCategory.getPlaylists().getItems();
 		}
 	}
 

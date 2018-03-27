@@ -1,4 +1,4 @@
-package com.ifood.repository;
+package com.ifood.repository.spotify;
 
 import java.util.List;
 
