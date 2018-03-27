@@ -11,17 +11,17 @@ import com.ifood.cache.PlaylistGenreCacheDecorator;
 import com.ifood.cache.TrackPlaylistCacheDecorator;
 import com.ifood.client.SpotifyClient;
 import com.ifood.domain.SpotifyToken;
-import com.ifood.service.client.SpotifyAuthService;
-import com.ifood.service.client.SpotifyService;
+import com.ifood.service.client.SpotifyAuthCredentialsFlowService;
+import com.ifood.service.client.SpotifyPlaylistService;
 
 @RunWith(SpringRunner.class)
-public class SpotifyServiceTests {
+public class SpotifyPlaylistServiceTests {
 
 	@Mock
 	SpotifyClient spotifyClient;
 
 	@Mock
-	SpotifyAuthService spotifyAuthService;
+	SpotifyAuthCredentialsFlowService spotifyAuthService;
 
 	@Mock
 	PlaylistGenreCacheDecorator playlistCategoryCache;
@@ -29,11 +29,11 @@ public class SpotifyServiceTests {
 	@Mock
 	TrackPlaylistCacheDecorator trackPlaylistCache;
 
-	SpotifyService spotifyService;
+	SpotifyPlaylistService spotifyService;
 
 	@Before
 	public void setUp() throws Exception {
-		spotifyService = new SpotifyService(spotifyClient, spotifyAuthService, playlistCategoryCache,
+		spotifyService = new SpotifyPlaylistService(spotifyClient, spotifyAuthService, playlistCategoryCache,
 				trackPlaylistCache);
 		when(spotifyAuthService.getToken()).thenReturn(new SpotifyToken("NgCXRKcMzYjw", "bearer", 3600L));
 	}

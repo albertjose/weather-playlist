@@ -10,23 +10,25 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ifood.controller.WeatherPlaylistController;
 import com.ifood.domain.WeatherPlaylistResponse;
 import com.ifood.exception.OpenWeatherMapResultException;
 import com.ifood.exception.SpotifyAuthException;
 import com.ifood.exception.SpotifyResultException;
 import com.ifood.exception.WeatherPlaylistException;
-import com.ifood.service.WeatherPlaylistService;
+import com.ifood.service.OpenWeatherSpotifyService;
 
 @RestController
 @RequestMapping(value = "/weather-playlist")
-public class WeatherPlaylistRest {
-	private static final Logger logger = LoggerFactory.getLogger(WeatherPlaylistRest.class);
+public class WeatherPlaylistRestController implements WeatherPlaylistController {
+	private static final Logger logger = LoggerFactory.getLogger(WeatherPlaylistRestController.class);
 
 	@Autowired
-	WeatherPlaylistService weatherPlaylistService;
+	OpenWeatherSpotifyService weatherPlaylistService;
 
 	@GetMapping(value = "/", params = { "city_name" }, produces = "application/json")
 	@ResponseStatus(HttpStatus.OK)
+	@Override
 	public WeatherPlaylistResponse getPlayListWeatherName(@RequestParam(value = "city_name") String cityName)
 			throws SpotifyResultException, OpenWeatherMapResultException, SpotifyAuthException,
 			WeatherPlaylistException {
@@ -36,6 +38,7 @@ public class WeatherPlaylistRest {
 
 	@GetMapping(value = "/", params = { "lat", "lon" }, produces = "application/json")
 	@ResponseStatus(HttpStatus.OK)
+	@Override
 	public WeatherPlaylistResponse getPlayListWeatherCoordinate(@RequestParam(value = "lat") Double latidude,
 			@RequestParam(value = "lon") Double longitude) throws SpotifyResultException, OpenWeatherMapResultException,
 			SpotifyAuthException, WeatherPlaylistException {

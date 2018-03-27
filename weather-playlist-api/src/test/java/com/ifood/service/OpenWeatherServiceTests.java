@@ -21,10 +21,10 @@ import com.ifood.domain.cache.CityNameCache;
 import com.ifood.domain.cache.TemperatureCache;
 import com.ifood.exception.OpenWeatherMapResultException;
 import com.ifood.helper.CoordinateHelper;
-import com.ifood.service.client.WeatherService;
+import com.ifood.service.client.OpenWeatherService;
 
 @RunWith(SpringRunner.class)
-public class WeatherServiceTests {
+public class OpenWeatherServiceTests {
 
 	@Mock
 	OpenWeatherMapClient weatherClient;
@@ -41,11 +41,11 @@ public class WeatherServiceTests {
 	@Rule
 	public ExpectedException expectedEx = ExpectedException.none();
 
-	WeatherService weatherService;
+	OpenWeatherService weatherService;
 
 	@Before
 	public void setUp() throws Exception {
-		weatherService = new WeatherService(weatherClient, cityNameCache, temperatureCache, cityCoordinateCache);
+		weatherService = new OpenWeatherService(weatherClient, cityNameCache, temperatureCache, cityCoordinateCache);
 	}
 
 	@Test
