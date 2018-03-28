@@ -38,7 +38,7 @@ $ sh startup.sh
 ### OR...
 Run command in weather-playlist-api folder:
 ```sh
-$ ./gradlew build -Dspring.profiles.active=docker;
+$ ./gradlew build -Dspring.profiles.active=docker
 ```
 In root foulder run:
 
@@ -46,19 +46,22 @@ In root foulder run:
 $ docker-compose build
 $ docker-compose up
 ```
+After application have come up cleanly, the following endpoint are available:
+http://dockerip:8080/weather-playlist
 
 ## To test the application
 
 Run command in weather-playlist-api folder:
 ```sh
-$ ./gradle test
+$ ./gradlew test
 ```
 Check test coverage:
 ```sh
-$ ./gradle test jacocoTestReport
+$ ./gradlew test jacocoTestReport
 ```
+Reports output in: */build/reports/jacoco/test/html/index.html*
 
-## Resources
+### Endpoints
 
 | Path             | Params       | Description |
 |------------------|--------------|--|
