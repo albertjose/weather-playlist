@@ -23,12 +23,12 @@ import com.ifood.builder.TrackPlaylistCacheBuilder;
 import com.ifood.cache.PlaylistGenreCacheDecorator;
 import com.ifood.cache.TrackPlaylistCacheDecorator;
 import com.ifood.client.SpotifyClient;
+import com.ifood.domain.GenreFactory;
 import com.ifood.domain.ResultPlaylistItem;
 import com.ifood.domain.ResultTrack;
 import com.ifood.domain.SpotifyToken;
 import com.ifood.domain.cache.PlaylistGenreCache;
 import com.ifood.domain.cache.TrackPlaylistCache;
-import com.ifood.domain.enums.GenreEnum;
 import com.ifood.exception.SpotifyAuthException;
 import com.ifood.exception.SpotifyResultException;
 
@@ -62,10 +62,12 @@ public class SpotifyPlaylistServiceTests {
 	@Test
 	public void getRandomPlaylistByCategory_getInCache() throws SpotifyResultException, SpotifyAuthException {
 		ResultPlaylistItem playlist = ResultPlaylistItemBuilder.build().now();
-		when(playlistCategoryCache.findOneByGenre(GenreEnum.CLASSICAL.getGenreName()))
-				.thenReturn(new PlaylistGenreCache(GenreEnum.CLASSICAL.getGenreName(), playlist.getId()));
+		Double temperature = 10.0;
+		when(playlistCategoryCache.findOneByGenre(GenreFactory.getGenreByTemperature(temperature).getName()))
+				.thenReturn(new PlaylistGenreCache(GenreFactory.getGenreByTemperature(temperature).getName(), playlist.getId()));
 
-		ResultPlaylistItem result = spotifyService.getRandomPlaylistByCategory(GenreEnum.CLASSICAL.getGenreName());
+		ResultPlaylistItem result = spotifyService
+				.getRandomPlaylistByCategory(GenreFactory.getGenreByTemperature(temperature).getName());
 		Assert.assertEquals(playlist.getId(), result.getId());
 
 	}
@@ -73,12 +75,15 @@ public class SpotifyPlaylistServiceTests {
 	@Test
 	public void getRandomPlaylistByCategory_notFoundInCache_getInClient()
 			throws SpotifyResultException, SpotifyAuthException {
+		Double temperature = 10.0;
+
 		ResultPlaylistItem playlist = ResultPlaylistItemBuilder.build().now();
-		when(playlistCategoryCache.findOneByGenre(GenreEnum.CLASSICAL.getGenreName())).thenReturn(null);
-		when(spotifyClient.getPlaylistByCategory(buildAuthorization(), GenreEnum.CLASSICAL.getGenreName()))
+		when(playlistCategoryCache.findOneByGenre(GenreFactory.getGenreByTemperature(temperature).getName())).thenReturn(null);
+		when(spotifyClient.getPlaylistByCategory(buildAuthorization(), GenreFactory.getGenreByTemperature(temperature).getName()))
 				.thenReturn(ResultPlaylistCategoryBuilder.build().now());
 
-		ResultPlaylistItem result = spotifyService.getRandomPlaylistByCategory(GenreEnum.CLASSICAL.getGenreName());
+		ResultPlaylistItem result = spotifyService
+				.getRandomPlaylistByCategory(GenreFactory.getGenreByTemperature(temperature).getName());
 		Assert.assertEquals(playlist.getId(), result.getId());
 
 	}
@@ -86,13 +91,15 @@ public class SpotifyPlaylistServiceTests {
 	@Test
 	public void getRandomPlaylistByCategory_notFoundInCache_notFoundInClient()
 			throws SpotifyResultException, SpotifyAuthException {
+		Double temperature = 10.0;
+
 		expectedEx.expect(SpotifyResultException.class);
 		expectedEx.expectMessage("Sorry. We did not find playlists for the current category.");
-		when(playlistCategoryCache.findOneByGenre(GenreEnum.CLASSICAL.getGenreName())).thenReturn(null);
-		when(spotifyClient.getPlaylistByCategory(buildAuthorization(), GenreEnum.CLASSICAL.getGenreName()))
+		when(playlistCategoryCache.findOneByGenre(GenreFactory.getGenreByTemperature(temperature).getName())).thenReturn(null);
+		when(spotifyClient.getPlaylistByCategory(buildAuthorization(), GenreFactory.getGenreByTemperature(temperature).getName()))
 				.thenReturn(null);
 
-		spotifyService.getRandomPlaylistByCategory(GenreEnum.CLASSICAL.getGenreName());
+		spotifyService.getRandomPlaylistByCategory(GenreFactory.getGenreByTemperature(temperature).getName());
 
 	}
 

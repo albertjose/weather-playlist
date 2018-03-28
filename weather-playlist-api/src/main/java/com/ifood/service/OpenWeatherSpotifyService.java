@@ -6,11 +6,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ifood.domain.Genre;
+import com.ifood.domain.GenreFactory;
 import com.ifood.domain.ResultPlaylistItem;
 import com.ifood.domain.ResultTrack;
 import com.ifood.domain.TrackResponse;
 import com.ifood.domain.WeatherPlaylistResponse;
-import com.ifood.domain.enums.GenreEnum;
 import com.ifood.exception.OpenWeatherMapResultException;
 import com.ifood.exception.SpotifyAuthException;
 import com.ifood.exception.SpotifyResultException;
@@ -57,13 +58,13 @@ public class OpenWeatherSpotifyService implements WeatherPlaylistService {
 			throw new WeatherPlaylistException("Sorry. We could not find the temperature of your city.");
 		}
 
-		String category = GenreEnum.selectCategory(temperature).getGenreName();
-		if (category == null) {
+		Genre genre = GenreFactory.getGenreByTemperature(temperature);
+		if (genre == null) {
 			throw new WeatherPlaylistException("Sorry. We could not find a category for you right now.");
 		}
 
 		// find playlist
-		ResultPlaylistItem resultPlaylist = spotifyPlaylistService.getRandomPlaylistByCategory(category);
+		ResultPlaylistItem resultPlaylist = spotifyPlaylistService.getRandomPlaylistByCategory(genre.getName());
 		if (resultPlaylist == null) {
 			throw new WeatherPlaylistException("Sorry. We could not find a playlist for you right now.");
 		}

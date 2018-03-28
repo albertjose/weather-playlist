@@ -19,7 +19,7 @@ public interface OpenWeatherMapClient {
 
 	@GetMapping(value = "?lat={lat}&lon={lon}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	ResultCityWeather getWeatherByLatLong(@PathVariable("lat") Double lat, @PathVariable("lat") Double lon);
+	ResultCityWeather getWeatherByLatLong(@PathVariable("lat") Double lat, @PathVariable("lon") Double lon);
 
 	@GetMapping(value = "?id={id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody

@@ -16,13 +16,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.support.StaticApplicationContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
 import com.ifood.builder.WeatherPlaylistResponseBuilder;
 import com.ifood.domain.WeatherPlaylistResponse;
-import com.ifood.exception.WeatherPlaylistBadRequestException;
+import com.ifood.exception.WeatherPlaylistExceptionHandler;
 import com.ifood.service.OpenWeatherSpotifyService;
 import com.ifood.util.TestUtil;
 
@@ -44,7 +46,15 @@ public class WeatherPlaylistRestControllerTests {
 	@Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
-		this.mockMvc = MockMvcBuilders.standaloneSetup(weatherPlaylistRestController).build();
+		final StaticApplicationContext applicationContext = new StaticApplicationContext();
+		applicationContext.registerSingleton("exceptionHandler", WeatherPlaylistExceptionHandler.class);
+
+		final WebMvcConfigurationSupport webMvcConfigurationSupport = new WebMvcConfigurationSupport();
+		webMvcConfigurationSupport.setApplicationContext(applicationContext);
+
+		mockMvc = MockMvcBuilders.standaloneSetup(weatherPlaylistRestController)
+				.setHandlerExceptionResolvers(webMvcConfigurationSupport.handlerExceptionResolver()).build();
+
 	}
 
 	@Test
@@ -76,12 +86,21 @@ public class WeatherPlaylistRestControllerTests {
 				.andExpect(jsonPath("tracks[0].name", is(trackResult.getTracks().get(0).getName())));
 	}
 
-	@Test(expected = WeatherPlaylistBadRequestException.class)
+	@Test
 	public void getPlayListWeatherCoordinate_coordinatesInvalid() throws Exception {
-		mockMvc.perform(get(String.format("/weather-playlist/?lat=%s&lon=%s", "16", "433599999")))
+		mockMvc.perform(get(String.format("/weather-playlist/?lat=%s&lon=%s", "140.60", "250.65")))
 				.andExpect(status().isBadRequest()).andExpect(content().contentType(TestUtil.APPLICATION_JSON_UTF8))
-				.andExpect(jsonPath("message",
-						is("Coordinate points are invalid. Please use the following format: 12.34")));
+				.andExpect(jsonPath("message", is("Coordinate points are invalid.")));
+	}
+
+	@Test
+	public void getPlayListWeatherCoordinate_coordinatesBlankLatLon() throws Exception {
+		mockMvc.perform(get(String.format("/weather-playlist/?lat=%s&lon=%s", "", "34.6")))
+				.andExpect(status().isBadRequest()).andExpect(content().contentType(TestUtil.APPLICATION_JSON_UTF8))
+				.andExpect(jsonPath("message", is("You must provide coordinate points (lat, lon)")));
+		mockMvc.perform(get(String.format("/weather-playlist/?lat=%s&lon=%s", "35.6", "")))
+				.andExpect(status().isBadRequest()).andExpect(content().contentType(TestUtil.APPLICATION_JSON_UTF8))
+				.andExpect(jsonPath("message", is("You must provide coordinate points (lat, lon)")));
 	}
 
 }

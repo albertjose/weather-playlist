@@ -16,10 +16,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.ifood.builder.ResultPlaylistItemBuilder;
 import com.ifood.builder.ResultTrackPlaylistBuilder;
+import com.ifood.domain.GenreFactory;
 import com.ifood.domain.ResultPlaylistItem;
 import com.ifood.domain.ResultTrack;
 import com.ifood.domain.WeatherPlaylistResponse;
-import com.ifood.domain.enums.GenreEnum;
 import com.ifood.exception.OpenWeatherMapResultException;
 import com.ifood.exception.SpotifyAuthException;
 import com.ifood.exception.SpotifyResultException;
@@ -59,8 +59,9 @@ public class OpenWeatherSpotifyServiceTests {
 		Double temperature = 9.0;
 
 		when(openWeatherService.searchWeatherByCityName("London")).thenReturn(temperature);
-		when(spotifyPlaylistService.getRandomPlaylistByCategory(GenreEnum.CLASSICAL.getGenreName()))
-				.thenReturn(playlist);
+		when(spotifyPlaylistService
+				.getRandomPlaylistByCategory(GenreFactory.getGenreByTemperature(temperature).getName()))
+						.thenReturn(playlist);
 		when(spotifyPlaylistService.getTracksByPlaylist(playlist.getId())).thenReturn(items);
 
 		WeatherPlaylistResponse result = openWeatheSpotifyService.getPlayListByWeatherCityName("London");
@@ -83,9 +84,12 @@ public class OpenWeatherSpotifyServiceTests {
 			OpenWeatherMapResultException, SpotifyAuthException, WeatherPlaylistException {
 		expectedEx.expect(WeatherPlaylistException.class);
 		expectedEx.expectMessage("Sorry. We could not find a playlist for you right now.");
+		Double temperature = 9.0;
 
-		when(openWeatherService.searchWeatherByCityName("London")).thenReturn(9.0);
-		when(spotifyPlaylistService.getRandomPlaylistByCategory(GenreEnum.CLASSICAL.getGenreName())).thenReturn(null);
+		when(openWeatherService.searchWeatherByCityName("London")).thenReturn(temperature);
+		when(spotifyPlaylistService
+				.getRandomPlaylistByCategory(GenreFactory.getGenreByTemperature(temperature).getName()))
+						.thenReturn(null);
 		openWeatheSpotifyService.getPlayListByWeatherCityName("London");
 	}
 
@@ -98,8 +102,9 @@ public class OpenWeatherSpotifyServiceTests {
 		Double temperature = 9.0;
 
 		when(openWeatherService.searchWeatherByCityName("London")).thenReturn(temperature);
-		when(spotifyPlaylistService.getRandomPlaylistByCategory(GenreEnum.CLASSICAL.getGenreName()))
-				.thenReturn(playlist);
+		when(spotifyPlaylistService
+				.getRandomPlaylistByCategory(GenreFactory.getGenreByTemperature(temperature).getName()))
+						.thenReturn(playlist);
 		when(spotifyPlaylistService.getTracksByPlaylist(playlist.getId())).thenReturn(null);
 
 		openWeatheSpotifyService.getPlayListByWeatherCityName("London");
@@ -110,14 +115,15 @@ public class OpenWeatherSpotifyServiceTests {
 			OpenWeatherMapResultException, SpotifyAuthException, WeatherPlaylistException {
 		ResultPlaylistItem playlist = ResultPlaylistItemBuilder.build().now();
 		List<ResultTrack> items = ResultTrackPlaylistBuilder.build().now().getItems();
-		Double temperature = 9.0;
+		Double temperature = 9.0, latitude = 15.5, longitude = 12.5;
 
-		when(openWeatherService.searchWeatherCoordinates(15.5, 12.5)).thenReturn(temperature);
-		when(spotifyPlaylistService.getRandomPlaylistByCategory(GenreEnum.CLASSICAL.getGenreName()))
-				.thenReturn(playlist);
+		when(openWeatherService.searchWeatherCoordinates(latitude, longitude)).thenReturn(temperature);
+		when(spotifyPlaylistService
+				.getRandomPlaylistByCategory(GenreFactory.getGenreByTemperature(temperature).getName()))
+						.thenReturn(playlist);
 		when(spotifyPlaylistService.getTracksByPlaylist(playlist.getId())).thenReturn(items);
 
-		WeatherPlaylistResponse result = openWeatheSpotifyService.getPlayListByWeatherCoordinates(15.5, 12.5);
+		WeatherPlaylistResponse result = openWeatheSpotifyService.getPlayListByWeatherCoordinates(latitude, longitude);
 		Assert.assertEquals(result.getTracks().get(0).getName(), items.get(0).getTrack().getName());
 		Assert.assertEquals(result.getCurrentTemperature(), temperature);
 	}

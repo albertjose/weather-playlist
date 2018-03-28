@@ -41,14 +41,19 @@ public class WeatherPlaylistRestController implements WeatherPlaylistController 
 	@GetMapping(value = "/", params = { "lat", "lon" }, produces = "application/json")
 	@ResponseStatus(HttpStatus.OK)
 	@Override
-	public WeatherPlaylistResponse getPlayListWeatherCoordinate(@RequestParam(value = "lat") Double latidude,
-			@RequestParam(value = "lon") Double longitude) throws SpotifyResultException, OpenWeatherMapResultException,
-			SpotifyAuthException, WeatherPlaylistException, WeatherPlaylistBadRequestException {
+	public WeatherPlaylistResponse getPlayListWeatherCoordinate(
+			@RequestParam(value = "lat", required = true) Double latidude,
+			@RequestParam(value = "lon", required = true) Double longitude)
+			throws SpotifyResultException, OpenWeatherMapResultException, SpotifyAuthException,
+			WeatherPlaylistException, WeatherPlaylistBadRequestException {
 		logger.debug(String.format("Searching playlist by coordinates: lat=%s lon=%s", latidude, longitude));
 
-		if (!CoordinateHelper.isValid(latidude, longitude)) {
-			throw new WeatherPlaylistBadRequestException(
-					"Coordinate points are invalid. Please use the following format: 12.34");
+		if (latidude == null || longitude == null) {
+			throw new WeatherPlaylistBadRequestException("You must provide coordinate points (lat, lon)");
+		}
+
+		if (!CoordinateHelper.inRange(latidude, longitude)) {
+			throw new WeatherPlaylistBadRequestException("Coordinate points are invalid.");
 		}
 
 		return openWeatherSpotifyService.getPlayListByWeatherCoordinates(latidude, longitude);
