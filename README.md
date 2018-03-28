@@ -5,19 +5,17 @@
  * Spring Boot 2.0.0.RELEASE
  * Redis (in-memory data structure store) for caching =P
  * Hystrix (latency and fault tolerance library)
-
+## Getting Started
 There are two ways to run the entire application:
 * On Local Machine
   * Redis required ([install](https://redis.io/topics/quickstart))
 * Using Docker ([install](https://docs.docker.com/install/)) and Docker Compose ([install](https://docs.docker.com/compose/install/))
-
-# On Local Machine
-
+### On Local Machine
 If your redis has running in default port (6379) it's ok, otherwise you need to modify application.yml according your configuration:
 ```java
 spring:
   redis:
-    host: redis
+    host: localhost
     port: 6379
 ```
 Run command in weather-playlist-api folder:
@@ -28,17 +26,17 @@ If you have permission error, just do:
 ```sh
 $ chmod +x gradlew
 ```
-
-
-# On docker
+When the application start the following endpoint are available:
+http://localhost:8080/weather-playlist
+### On docker
 Fast run with:
 ```sh
 $ sh startup.sh
 ```
-### OR...
+#### OR...
 Run command in weather-playlist-api folder:
 ```sh
-$ ./gradlew build -Dspring.profiles.active=docker;
+$ ./gradlew build
 ```
 In root foulder run:
 
@@ -46,19 +44,22 @@ In root foulder run:
 $ docker-compose build
 $ docker-compose up
 ```
+After application have come up cleanly, the following endpoint are available:
+http://dockerip:8080/weather-playlist
 
 ## To test the application
 
 Run command in weather-playlist-api folder:
 ```sh
-$ ./gradle test
+$ ./gradlew test
 ```
 Check test coverage:
 ```sh
-$ ./gradle test jacocoTestReport
+$ ./gradlew test jacocoTestReport
 ```
+Reports output in: */build/reports/jacoco/test/html/index.html*
 
-## Resources
+### Endpoints
 
 | Path             | Params       | Description |
 |------------------|--------------|--|
