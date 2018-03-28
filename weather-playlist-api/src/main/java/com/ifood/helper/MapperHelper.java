@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -15,13 +14,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class MapperHelper {
 
-	@Bean
-	public ModelMapper modelMapper() {
-		return new ModelMapper();
-	}
+	private ModelMapper modelMapper;
 
 	@Autowired
-	private ModelMapper modelMapper;
+	public MapperHelper(ModelMapper modelMapper) {
+		this.modelMapper = modelMapper;
+	}
 
 	public <T, D> List<D> fromList(List<T> origin, Class<D> destiny) {
 		return origin.stream().map(item -> fromObject(item, destiny)).collect(Collectors.toList());

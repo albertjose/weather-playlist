@@ -6,6 +6,16 @@ public class WeatherPlaylistResponse {
 	private Double currentTemperature;
 	private List<TrackResponse> tracks;
 
+	public WeatherPlaylistResponse() {
+		super();
+	}
+
+	public WeatherPlaylistResponse(Double currentTemperature, List<TrackResponse> tracks) {
+		super();
+		this.currentTemperature = currentTemperature;
+		this.tracks = tracks;
+	}
+
 	public Double getCurrentTemperature() {
 		return currentTemperature;
 	}

@@ -14,18 +14,21 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.ifood.builder.ResultPlaylistCategoryBuilder;
+import com.ifood.builder.ResultPlaylistItemBuilder;
+import com.ifood.builder.ResultTrackItemBuilder;
+import com.ifood.builder.ResultTrackPlaylistBuilder;
+import com.ifood.builder.SpotifyTokenBuilder;
+import com.ifood.builder.TrackPlaylistCacheBuilder;
 import com.ifood.cache.PlaylistGenreCacheDecorator;
 import com.ifood.cache.TrackPlaylistCacheDecorator;
 import com.ifood.client.SpotifyClient;
-import com.ifood.domain.ResultPlaylist;
-import com.ifood.domain.ResultPlaylistCategory;
 import com.ifood.domain.ResultPlaylistItem;
 import com.ifood.domain.ResultTrack;
-import com.ifood.domain.ResultTrackItem;
-import com.ifood.domain.ResultTrackPlaylist;
 import com.ifood.domain.SpotifyToken;
 import com.ifood.domain.cache.PlaylistGenreCache;
 import com.ifood.domain.cache.TrackPlaylistCache;
+import com.ifood.domain.enums.GenreEnum;
 import com.ifood.exception.SpotifyAuthException;
 import com.ifood.exception.SpotifyResultException;
 
@@ -53,16 +56,16 @@ public class SpotifyPlaylistServiceTests {
 	public void setUp() throws Exception {
 		spotifyService = new SpotifyPlaylistService(spotifyClient, spotifyAuthService, playlistCategoryCache,
 				trackPlaylistCache);
-		when(spotifyAuthService.getToken()).thenReturn(createSpotifyToken());
+		when(spotifyAuthService.getToken()).thenReturn(SpotifyTokenBuilder.build().now());
 	}
 
 	@Test
 	public void getRandomPlaylistByCategory_getInCache() throws SpotifyResultException, SpotifyAuthException {
-		ResultPlaylistItem playlist = createResultPlaylistItem();
-		when(playlistCategoryCache.findOneByGenre(getGenre()))
-				.thenReturn(new PlaylistGenreCache(getGenre(), playlist.getId()));
+		ResultPlaylistItem playlist = ResultPlaylistItemBuilder.build().now();
+		when(playlistCategoryCache.findOneByGenre(GenreEnum.CLASSICAL.getGenreName()))
+				.thenReturn(new PlaylistGenreCache(GenreEnum.CLASSICAL.getGenreName(), playlist.getId()));
 
-		ResultPlaylistItem result = spotifyService.getRandomPlaylistByCategory(getGenre());
+		ResultPlaylistItem result = spotifyService.getRandomPlaylistByCategory(GenreEnum.CLASSICAL.getGenreName());
 		Assert.assertEquals(playlist.getId(), result.getId());
 
 	}
@@ -70,12 +73,12 @@ public class SpotifyPlaylistServiceTests {
 	@Test
 	public void getRandomPlaylistByCategory_notFoundInCache_getInClient()
 			throws SpotifyResultException, SpotifyAuthException {
-		ResultPlaylistItem playlist = createResultPlaylistItem();
-		when(playlistCategoryCache.findOneByGenre(getGenre())).thenReturn(null);
-		when(spotifyClient.getPlaylistByCategory(buildAuthorization(), getGenre()))
-				.thenReturn(createResultPlayListCategory());
+		ResultPlaylistItem playlist = ResultPlaylistItemBuilder.build().now();
+		when(playlistCategoryCache.findOneByGenre(GenreEnum.CLASSICAL.getGenreName())).thenReturn(null);
+		when(spotifyClient.getPlaylistByCategory(buildAuthorization(), GenreEnum.CLASSICAL.getGenreName()))
+				.thenReturn(ResultPlaylistCategoryBuilder.build().now());
 
-		ResultPlaylistItem result = spotifyService.getRandomPlaylistByCategory(getGenre());
+		ResultPlaylistItem result = spotifyService.getRandomPlaylistByCategory(GenreEnum.CLASSICAL.getGenreName());
 		Assert.assertEquals(playlist.getId(), result.getId());
 
 	}
@@ -85,34 +88,35 @@ public class SpotifyPlaylistServiceTests {
 			throws SpotifyResultException, SpotifyAuthException {
 		expectedEx.expect(SpotifyResultException.class);
 		expectedEx.expectMessage("Sorry. We did not find playlists for the current category.");
-		when(playlistCategoryCache.findOneByGenre(getGenre())).thenReturn(null);
-		when(spotifyClient.getPlaylistByCategory(buildAuthorization(), getGenre())).thenReturn(null);
+		when(playlistCategoryCache.findOneByGenre(GenreEnum.CLASSICAL.getGenreName())).thenReturn(null);
+		when(spotifyClient.getPlaylistByCategory(buildAuthorization(), GenreEnum.CLASSICAL.getGenreName()))
+				.thenReturn(null);
 
-		spotifyService.getRandomPlaylistByCategory(getGenre());
+		spotifyService.getRandomPlaylistByCategory(GenreEnum.CLASSICAL.getGenreName());
 
 	}
 
 	@Test
 	public void getTracksByPlaylist_getInCache() throws SpotifyResultException, SpotifyAuthException {
-		ResultPlaylistItem playlist = createResultPlaylistItem();
-		List<TrackPlaylistCache> trackListCache = createListOfTrackPlaylistCache();
-		when(trackPlaylistCache.findByPlaylistId(playlist.getId())).thenReturn(trackListCache);
+		ResultPlaylistItem playlist = ResultPlaylistItemBuilder.build().now();
+		TrackPlaylistCache item = TrackPlaylistCacheBuilder.build().now();
+		when(trackPlaylistCache.findByPlaylistId(playlist.getId())).thenReturn(Arrays.asList(item));
 
 		List<ResultTrack> resultTrack = spotifyService.getTracksByPlaylist(playlist.getId());
 
-		Assert.assertEquals(resultTrack.get(0).getTrack().getName(), trackListCache.get(0).getTrackName());
+		Assert.assertEquals(resultTrack.get(0).getTrack().getName(), item.getTrackName());
 	}
 
 	@Test
 	public void getTracksByPlaylist_notFoundInCache_getInClient() throws SpotifyResultException, SpotifyAuthException {
-		ResultPlaylistItem playlist = createResultPlaylistItem();
+		ResultPlaylistItem playlist = ResultPlaylistItemBuilder.build().now();
 		when(trackPlaylistCache.findByPlaylistId(playlist.getId())).thenReturn(null);
 		when(spotifyClient.getTracksByPlaylistId(buildAuthorization(), playlist.getId()))
-				.thenReturn(createResultTrackPlaylist());
+				.thenReturn(ResultTrackPlaylistBuilder.build().now());
 
 		List<ResultTrack> resultTrack = spotifyService.getTracksByPlaylist(playlist.getId());
 
-		Assert.assertEquals(resultTrack.get(0).getTrack().getName(), getTrackName());
+		Assert.assertEquals(resultTrack.get(0).getTrack().getName(), ResultTrackItemBuilder.build().now().getName());
 	}
 
 	@Test
@@ -120,7 +124,7 @@ public class SpotifyPlaylistServiceTests {
 			throws SpotifyResultException, SpotifyAuthException {
 		expectedEx.expect(SpotifyResultException.class);
 		expectedEx.expectMessage("Sorry. We did not find tracks for the current category.");
-		ResultPlaylistItem playlist = createResultPlaylistItem();
+		ResultPlaylistItem playlist = ResultPlaylistItemBuilder.build().now();
 		when(trackPlaylistCache.findByPlaylistId(playlist.getId())).thenReturn(null);
 		when(spotifyClient.getTracksByPlaylistId(buildAuthorization(), playlist.getId())).thenReturn(null);
 
@@ -128,62 +132,9 @@ public class SpotifyPlaylistServiceTests {
 
 	}
 
-	private List<TrackPlaylistCache> createListOfTrackPlaylistCache() {
-		List<TrackPlaylistCache> list = Arrays.asList(createTrackPlaylistCache());
-		return list;
-	}
-
-	private TrackPlaylistCache createTrackPlaylistCache() {
-		return new TrackPlaylistCache(getTrackName(), getPlaylistId());
-	}
-
-	private String getPlaylistId() {
-		return "a1b2c3";
-	}
-
-	private String getTrackName() {
-		return "ToxyCity";
-	}
-
-	private String getGenre() {
-		return "rock";
-	}
-
-	private ResultPlaylistCategory createResultPlayListCategory() {
-		return new ResultPlaylistCategory(createResultPlaylist());
-	}
-
-	private ResultPlaylist createResultPlaylist() {
-		return new ResultPlaylist(Arrays.asList(createResultPlaylistItem()));
-	}
-
-	private ResultPlaylistItem createResultPlaylistItem() {
-		return new ResultPlaylistItem(getPlaylistId());
-	}
-
-	private ResultTrackPlaylist createResultTrackPlaylist() {
-		ResultTrackPlaylist resultTrackPlaylist = new ResultTrackPlaylist();
-		List<ResultTrack> items = Arrays.asList(createResultTrack());
-		resultTrackPlaylist.setItems(items);
-		return resultTrackPlaylist;
-
-	}
-
 	private String buildAuthorization() {
-		SpotifyToken spotifyToken = createSpotifyToken();
+		SpotifyToken spotifyToken = SpotifyTokenBuilder.build().now();
 		return String.format("%s %s", spotifyToken.getTokenType(), spotifyToken.getAccessToken());
-	}
-
-	private ResultTrack createResultTrack() {
-		return new ResultTrack(createResultTrackItem());
-	}
-
-	private ResultTrackItem createResultTrackItem() {
-		return new ResultTrackItem(getTrackName());
-	}
-
-	private SpotifyToken createSpotifyToken() {
-		return new SpotifyToken("NgCXRKcMzYjw", "bearer", 3600L);
 	}
 
 }

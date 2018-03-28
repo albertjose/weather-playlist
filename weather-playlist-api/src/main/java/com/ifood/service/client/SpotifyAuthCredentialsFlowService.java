@@ -72,10 +72,9 @@ public class SpotifyAuthCredentialsFlowService implements SpotifyAuthService {
 	private SpotifyToken generateToken() {
 		Map<String, String> params = new HashMap<>();
 		params.put("grant_type", "client_credentials");
-		String clientCredentials = String.format("%s:%s", clientId, clientSecret);
-		String credentialsHeader = "Basic " + Base64.getEncoder().encodeToString(clientCredentials.getBytes());
+		String credentialsHeader = "Basic "
+				+ Base64.getEncoder().encodeToString(String.format("%s:%s", clientId, clientSecret).getBytes());
 
 		return spotifyAuthClient.generateTokenAccess(credentialsHeader, params);
 	}
-
 }

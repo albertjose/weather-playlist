@@ -53,8 +53,11 @@ public class OpenWeatherSpotifyService implements WeatherPlaylistService {
 
 	private WeatherPlaylistResponse getPlaylistByTemperature(Double temperature)
 			throws SpotifyResultException, SpotifyAuthException, WeatherPlaylistException {
+		if (temperature == null) {
+			throw new WeatherPlaylistException("Sorry. We could not find the temperature of your city.");
+		}
 
-		String category = GenreEnum.selectCategory(temperature).getCategotyId();
+		String category = GenreEnum.selectCategory(temperature).getGenreName();
 		if (category == null) {
 			throw new WeatherPlaylistException("Sorry. We could not find a category for you right now.");
 		}

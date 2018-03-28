@@ -12,6 +12,11 @@ public class ResultTrackPlaylist implements Serializable {
 		super();
 	}
 
+	public ResultTrackPlaylist(List<ResultTrack> items) {
+		super();
+		this.items = items;
+	}
+
 	public List<ResultTrack> getItems() {
 		return items;
 	}

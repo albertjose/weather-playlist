@@ -21,6 +21,18 @@ public class SpotifyTokenCache implements Serializable {
 	@TimeToLive(unit = TimeUnit.SECONDS)
 	private Long expiresIn;
 
+	public SpotifyTokenCache() {
+		super();
+	}
+
+	public SpotifyTokenCache(String id, String accessToken, String tokenType, Long expiresIn) {
+		super();
+		this.id = id;
+		this.accessToken = accessToken;
+		this.tokenType = tokenType;
+		this.expiresIn = expiresIn;
+	}
+
 	public String getId() {
 		return id;
 	}

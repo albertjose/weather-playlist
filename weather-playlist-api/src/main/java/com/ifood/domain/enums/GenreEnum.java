@@ -31,11 +31,11 @@ public enum GenreEnum {
 		this.temperature = temperature;
 	}
 
-	public String getCategotyId() {
+	public String getGenreName() {
 		return name;
 	}
 
-	public void setCategotyId(String categotyId) {
+	public void setGenreName(String categotyId) {
 		this.name = categotyId;
 	}
 }
