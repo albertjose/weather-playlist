@@ -15,7 +15,7 @@ $ sh startup.sh
 ### OR...
 Run command in weather-playlist-api folder:
 ```sh
-$ ./gradle build
+$ ./gradlew build -Dspring.profiles.active=docker;
 ```
 In root foulder run:
 
