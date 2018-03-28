@@ -6,8 +6,31 @@
  * Redis (in-memory data structure store) for caching =P
  * Hystrix (latency and fault tolerance library)
 
+There are two ways to run the entire application:
+* On Local Machine
+  * Redis required ([install](https://redis.io/topics/quickstart))
+* Using Docker ([install](https://docs.docker.com/install/)) and Docker Compose ([install](https://docs.docker.com/compose/install/))
 
-# Build with docker
+# On Local Machine
+
+If your redis has running in default port (6379) it's ok, otherwise you need to modify application.yml according your configuration:
+```java
+spring:
+  redis:
+    host: redis
+    port: 6379
+```
+Run command in weather-playlist-api folder:
+```sh
+$ ./gradlew build
+```
+If you have permission error, just do:
+```sh
+$ chmod +x gradlew
+```
+
+
+# On docker
 Fast run with:
 ```sh
 $ sh startup.sh
