@@ -48,4 +48,12 @@ public class WeatherPlaylistExceptionHandler extends ResponseEntityExceptionHand
 		return ResponseEntity.status(errorResponse.getStatusCode()).body(errorResponse);
 	}
 
+	@ExceptionHandler(value = WeatherPlaylistBadRequestException.class)
+	public ResponseEntity<ErrorResponse> handleClientsResultException(WeatherPlaylistBadRequestException e) {
+		logger.error("ClientResultException handled", e);
+		ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage(),
+				HttpStatus.BAD_REQUEST.name());
+		return ResponseEntity.status(errorResponse.getStatusCode()).body(errorResponse);
+	}
+
 }

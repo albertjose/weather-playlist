@@ -15,7 +15,9 @@ import com.ifood.domain.WeatherPlaylistResponse;
 import com.ifood.exception.OpenWeatherMapResultException;
 import com.ifood.exception.SpotifyAuthException;
 import com.ifood.exception.SpotifyResultException;
+import com.ifood.exception.WeatherPlaylistBadRequestException;
 import com.ifood.exception.WeatherPlaylistException;
+import com.ifood.helper.CoordinateHelper;
 import com.ifood.service.OpenWeatherSpotifyService;
 
 @RestController
@@ -41,8 +43,14 @@ public class WeatherPlaylistRestController implements WeatherPlaylistController 
 	@Override
 	public WeatherPlaylistResponse getPlayListWeatherCoordinate(@RequestParam(value = "lat") Double latidude,
 			@RequestParam(value = "lon") Double longitude) throws SpotifyResultException, OpenWeatherMapResultException,
-			SpotifyAuthException, WeatherPlaylistException {
+			SpotifyAuthException, WeatherPlaylistException, WeatherPlaylistBadRequestException {
 		logger.debug(String.format("Searching playlist by coordinates: lat=%s lon=%s", latidude, longitude));
+
+		if (!CoordinateHelper.isValid(latidude, longitude)) {
+			throw new WeatherPlaylistBadRequestException(
+					"Coordinate points are invalid. Please use the following format: 12.34");
+		}
+
 		return openWeatherSpotifyService.getPlayListByWeatherCoordinates(latidude, longitude);
 	}
 

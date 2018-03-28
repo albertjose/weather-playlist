@@ -4,6 +4,7 @@ import com.ifood.domain.WeatherPlaylistResponse;
 import com.ifood.exception.OpenWeatherMapResultException;
 import com.ifood.exception.SpotifyAuthException;
 import com.ifood.exception.SpotifyResultException;
+import com.ifood.exception.WeatherPlaylistBadRequestException;
 import com.ifood.exception.WeatherPlaylistException;
 
 public interface WeatherPlaylistController {
@@ -12,5 +13,5 @@ public interface WeatherPlaylistController {
 
 	WeatherPlaylistResponse getPlayListWeatherCoordinate(Double latidude, Double longitude)
 			throws SpotifyResultException, OpenWeatherMapResultException, SpotifyAuthException,
-			WeatherPlaylistException;
+			WeatherPlaylistException, WeatherPlaylistBadRequestException;
 }

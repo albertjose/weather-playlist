@@ -8,7 +8,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -20,6 +22,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.ifood.builder.WeatherPlaylistResponseBuilder;
 import com.ifood.domain.WeatherPlaylistResponse;
+import com.ifood.exception.WeatherPlaylistBadRequestException;
 import com.ifood.service.OpenWeatherSpotifyService;
 import com.ifood.util.TestUtil;
 
@@ -34,6 +37,9 @@ public class WeatherPlaylistRestControllerTests {
 
 	@Mock
 	OpenWeatherSpotifyService openWeatherSpotifyService;
+
+	@Rule
+	public ExpectedException expectedEx = ExpectedException.none();
 
 	@Before
 	public void setUp() throws Exception {
@@ -68,6 +74,14 @@ public class WeatherPlaylistRestControllerTests {
 				.andExpect(status().isOk()).andExpect(content().contentType(TestUtil.APPLICATION_JSON_UTF8))
 				.andExpect(jsonPath("currentTemperature", is(trackResult.getCurrentTemperature())))
 				.andExpect(jsonPath("tracks[0].name", is(trackResult.getTracks().get(0).getName())));
+	}
+
+	@Test(expected = WeatherPlaylistBadRequestException.class)
+	public void getPlayListWeatherCoordinate_coordinatesInvalid() throws Exception {
+		mockMvc.perform(get(String.format("/weather-playlist/?lat=%s&lon=%s", "16", "433599999")))
+				.andExpect(status().isBadRequest()).andExpect(content().contentType(TestUtil.APPLICATION_JSON_UTF8))
+				.andExpect(jsonPath("message",
+						is("Coordinate points are invalid. Please use the following format: 12.34")));
 	}
 
 }
