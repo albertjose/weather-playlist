@@ -38,7 +38,7 @@ Run command in weather-playlist-api folder:
 ```sh
 $ ./gradlew build
 ```
-In root foulder run:
+In root folder run:
 
 ```sh
 $ docker-compose build
