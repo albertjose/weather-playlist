@@ -6,8 +6,10 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Scope;
 
 import feign.Logger;
+import feign.codec.Decoder;
 import feign.codec.Encoder;
 import feign.form.FormEncoder;
+import feign.jackson.JacksonDecoder;
 
 @Configuration
 public class CoreFeignConfiguration {
@@ -17,6 +19,13 @@ public class CoreFeignConfiguration {
 	@Scope("prototype")
 	Encoder feignFormEncoder() {
 		return new FormEncoder();
+	}
+
+	@Bean
+	@Primary
+	@Scope("prototype")
+	Decoder gsonDecoder() {
+		return new JacksonDecoder();
 	}
 
 	@Bean
