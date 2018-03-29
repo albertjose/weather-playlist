@@ -27,8 +27,10 @@ feign:
     enabled: true
 hystrix:
     command:
-      default.execution.isolation.thread.timeoutInMilliseconds: 3000
-      
+      default.execution.isolation.thread.timeoutInMilliseconds: 4000
+logging:
+  level:
+     com.ifood: DEBUG
       
 ---
 # For deployment in Docker containers

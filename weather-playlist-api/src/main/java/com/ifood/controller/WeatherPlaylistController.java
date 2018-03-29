@@ -8,8 +8,9 @@ import com.ifood.exception.WeatherPlaylistBadRequestException;
 import com.ifood.exception.WeatherPlaylistException;
 
 public interface WeatherPlaylistController {
-	WeatherPlaylistResponse getPlayListWeatherName(String name) throws SpotifyResultException,
-			OpenWeatherMapResultException, SpotifyAuthException, WeatherPlaylistException;
+	WeatherPlaylistResponse getPlayListWeatherName(String name)
+			throws SpotifyResultException, OpenWeatherMapResultException, SpotifyAuthException,
+			WeatherPlaylistException, WeatherPlaylistBadRequestException;
 
 	WeatherPlaylistResponse getPlayListWeatherCoordinate(Double latidude, Double longitude)
 			throws SpotifyResultException, OpenWeatherMapResultException, SpotifyAuthException,

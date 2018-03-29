@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,7 @@ import com.ifood.exception.SpotifyResultException;
 
 @Service
 public class SpotifyPlaylistService implements SpotifyService {
+	private static final Logger logger = LoggerFactory.getLogger(SpotifyPlaylistService.class);
 
 	SpotifyClient spotifyClient;
 
@@ -47,6 +50,7 @@ public class SpotifyPlaylistService implements SpotifyService {
 		// find random playlist in redis
 		PlaylistGenreCache cachedCategory = playlistGenreCache.findOneByGenre(category);
 		if (cachedCategory != null) {
+			logger.debug(String.format("Get a Playlist from cache in Redis, key: playlistGenre:%s", category));
 			return new ResultPlaylistItem(cachedCategory.getPlaylistId());
 		} else {
 			Random randow = new Random();
@@ -61,6 +65,7 @@ public class SpotifyPlaylistService implements SpotifyService {
 			throws SpotifyResultException, SpotifyAuthException {
 		List<TrackPlaylistCache> cachedTracks = trackPlaylistCache.findByPlaylistId(playlistId);
 		if (cachedTracks != null && !cachedTracks.isEmpty()) {
+			logger.debug(String.format("Get tracks from cache in Redis, key: trackPlaylist:%s", playlistId));
 			List<ResultTrack> items = cachedTracks.stream()
 					.map(e -> new ResultTrack(new ResultTrackItem(e.getTrackName()))).collect(Collectors.toList());
 			return items;

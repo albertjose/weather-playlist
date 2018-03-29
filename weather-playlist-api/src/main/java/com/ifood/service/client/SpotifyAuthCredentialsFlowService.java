@@ -4,6 +4,8 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,7 @@ import com.ifood.helper.MapperHelper;
 
 @Service
 public class SpotifyAuthCredentialsFlowService implements SpotifyAuthService {
+	private static final Logger logger = LoggerFactory.getLogger(SpotifyAuthCredentialsFlowService.class);
 
 	@Value("${app.spotify.auth.client-id}")
 	private String clientId;
@@ -51,6 +54,7 @@ public class SpotifyAuthCredentialsFlowService implements SpotifyAuthService {
 		SpotifyTokenCache tokenCached = spotifyTokenCache.findOne();
 
 		if (tokenCached != null) {
+			logger.debug("Get a token from cache in Redis, key: spotifyToken");
 			return mapperHelper.fromObject(tokenCached, SpotifyToken.class);
 		} else {
 			spotifyToken = generateToken();
@@ -70,6 +74,7 @@ public class SpotifyAuthCredentialsFlowService implements SpotifyAuthService {
 	 * @return
 	 */
 	private SpotifyToken generateToken() {
+		logger.debug("Generate a new token generateToken()");
 		Map<String, String> params = new HashMap<>();
 		params.put("grant_type", "client_credentials");
 		String credentialsHeader = "Basic "

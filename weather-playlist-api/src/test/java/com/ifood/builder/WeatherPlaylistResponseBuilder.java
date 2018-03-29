@@ -3,6 +3,7 @@ package com.ifood.builder;
 import java.util.Arrays;
 import java.util.List;
 
+import com.ifood.domain.GenreFactory;
 import com.ifood.domain.TrackResponse;
 import com.ifood.domain.WeatherPlaylistResponse;
 
@@ -10,6 +11,7 @@ public class WeatherPlaylistResponseBuilder {
 
 	private static final double CURRENT_TEMPERATURE = 9.0;
 	private List<TrackResponse> tracks = Arrays.asList(TrackResponseBuilder.build().now());
+	private String suggestedGenre = GenreFactory.getGenreByTemperature(CURRENT_TEMPERATURE).getName();
 	private Double currentTemperature = CURRENT_TEMPERATURE;
 
 	public static WeatherPlaylistResponseBuilder build() {
@@ -17,7 +19,7 @@ public class WeatherPlaylistResponseBuilder {
 	}
 
 	public WeatherPlaylistResponse now() {
-		return new WeatherPlaylistResponse(currentTemperature, tracks);
+		return new WeatherPlaylistResponse(currentTemperature, suggestedGenre, tracks);
 	}
 
 }
