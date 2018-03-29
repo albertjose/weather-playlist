@@ -29,7 +29,7 @@ public class WeatherPlaylistRestController implements WeatherPlaylistController 
 	@Autowired
 	OpenWeatherSpotifyService openWeatherSpotifyService;
 
-	@GetMapping(value = "/", params = { "city_name" }, produces = "application/json")
+	@GetMapping(params = { "city_name" }, produces = "application/json")
 	@ResponseStatus(HttpStatus.OK)
 	@Override
 	public WeatherPlaylistResponse getPlayListWeatherName(@RequestParam(value = "city_name") String cityName)
@@ -43,7 +43,7 @@ public class WeatherPlaylistRestController implements WeatherPlaylistController 
 		return openWeatherSpotifyService.getPlayListByWeatherCityName(cityName);
 	}
 
-	@GetMapping(value = "/", params = { "lat", "lon" }, produces = "application/json")
+	@GetMapping(params = { "lat", "lon" }, produces = "application/json")
 	@ResponseStatus(HttpStatus.OK)
 	@Override
 	public WeatherPlaylistResponse getPlayListWeatherCoordinate(
