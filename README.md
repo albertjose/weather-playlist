@@ -3,8 +3,8 @@
 
 ## Main building blocks
  * Spring Boot 2.0.0.RELEASE
- * Redis (in-memory data structure store) for caching =P
- * Hystrix (latency and fault tolerance library)
+ * Redis ([docs](docs/cache.md)) (in-memory data structure store) for caching =P
+ * Hystrix ([docs](docs/hystrixfallback.md)) (latency and fault tolerance library)
 ## Getting Started
 There are two ways to run the entire application:
 * On Local Machine
