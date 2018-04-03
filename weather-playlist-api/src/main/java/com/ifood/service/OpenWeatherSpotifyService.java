@@ -3,6 +3,8 @@ package com.ifood.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,7 @@ import com.ifood.service.client.SpotifyPlaylistService;
 
 @Service
 public class OpenWeatherSpotifyService implements WeatherPlaylistService {
+	private static final Logger logger = LoggerFactory.getLogger(OpenWeatherSpotifyService.class);
 
 	OpenWeatherService openWeatherService;
 
@@ -54,17 +57,20 @@ public class OpenWeatherSpotifyService implements WeatherPlaylistService {
 
 	private WeatherPlaylistResponse getPlaylistByTemperature(Double temperature)
 			throws SpotifyResultException, SpotifyAuthException, WeatherPlaylistException {
+
 		if (temperature == null) {
 			throw new WeatherPlaylistException("Sorry. We could not find the temperature of your city.");
 		}
 
-		Genre genre = GenreFactory.getGenreByTemperature(temperature);
-		if (genre == null) {
+		Genre suggestedGenre = GenreFactory.getGenreByTemperature(temperature);
+		if (suggestedGenre == null) {
 			throw new WeatherPlaylistException("Sorry. We could not find a category for you right now.");
 		}
+		logger.debug(String.format("Get musical genre: %s by temperature %f.", suggestedGenre.getName(), temperature));
 
 		// find playlist
-		ResultPlaylistItem resultPlaylist = spotifyPlaylistService.getRandomPlaylistByCategory(genre.getName());
+		ResultPlaylistItem resultPlaylist = spotifyPlaylistService
+				.getRandomPlaylistByCategory(suggestedGenre.getName());
 		if (resultPlaylist == null) {
 			throw new WeatherPlaylistException("Sorry. We could not find a playlist for you right now.");
 		}
@@ -76,11 +82,13 @@ public class OpenWeatherSpotifyService implements WeatherPlaylistService {
 		try {
 			resultTrack.forEach(rt -> listOFTracks.add(mapperHelper.fromObject(rt.getTrack(), TrackResponse.class)));
 		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
 			throw new WeatherPlaylistException("Sorry. We could not find a track set for you right now.");
 		}
 
 		WeatherPlaylistResponse response = new WeatherPlaylistResponse();
 		response.setCurrentTemperature(temperature);
+		response.setSuggestedGenre(suggestedGenre.getName());
 		response.setTracks(listOFTracks);
 
 		return response;

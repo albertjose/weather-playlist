@@ -4,15 +4,17 @@ import java.util.List;
 
 public class WeatherPlaylistResponse {
 	private Double currentTemperature;
+	private String suggestedGenre;
 	private List<TrackResponse> tracks;
 
 	public WeatherPlaylistResponse() {
 		super();
 	}
 
-	public WeatherPlaylistResponse(Double currentTemperature, List<TrackResponse> tracks) {
+	public WeatherPlaylistResponse(Double currentTemperature, String suggestedGenre, List<TrackResponse> tracks) {
 		super();
 		this.currentTemperature = currentTemperature;
+		this.suggestedGenre = suggestedGenre;
 		this.tracks = tracks;
 	}
 
@@ -30,6 +32,14 @@ public class WeatherPlaylistResponse {
 
 	public void setTracks(List<TrackResponse> tracks) {
 		this.tracks = tracks;
+	}
+
+	public String getSuggestedGenre() {
+		return suggestedGenre;
+	}
+
+	public void setSuggestedGenre(String suggestedGenre) {
+		this.suggestedGenre = suggestedGenre;
 	}
 
 }

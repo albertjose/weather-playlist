@@ -1,5 +1,6 @@
 package com.ifood.controller.rest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,17 +29,21 @@ public class WeatherPlaylistRestController implements WeatherPlaylistController 
 	@Autowired
 	OpenWeatherSpotifyService openWeatherSpotifyService;
 
-	@GetMapping(value = "/", params = { "city_name" }, produces = "application/json")
+	@GetMapping(params = { "city_name" }, produces = "application/json")
 	@ResponseStatus(HttpStatus.OK)
 	@Override
 	public WeatherPlaylistResponse getPlayListWeatherName(@RequestParam(value = "city_name") String cityName)
 			throws SpotifyResultException, OpenWeatherMapResultException, SpotifyAuthException,
-			WeatherPlaylistException {
+			WeatherPlaylistException, WeatherPlaylistBadRequestException {
 		logger.debug("Searching playlist by cityName=" + cityName);
+
+		if (StringUtils.isBlank(cityName)) {
+			throw new WeatherPlaylistBadRequestException("You must provide the city name.");
+		}
 		return openWeatherSpotifyService.getPlayListByWeatherCityName(cityName);
 	}
 
-	@GetMapping(value = "/", params = { "lat", "lon" }, produces = "application/json")
+	@GetMapping(params = { "lat", "lon" }, produces = "application/json")
 	@ResponseStatus(HttpStatus.OK)
 	@Override
 	public WeatherPlaylistResponse getPlayListWeatherCoordinate(

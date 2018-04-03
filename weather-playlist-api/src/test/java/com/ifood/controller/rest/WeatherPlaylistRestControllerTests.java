@@ -15,9 +15,8 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.support.StaticApplicationContext;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
@@ -28,8 +27,7 @@ import com.ifood.exception.WeatherPlaylistExceptionHandler;
 import com.ifood.service.OpenWeatherSpotifyService;
 import com.ifood.util.TestUtil;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest
+@RunWith(SpringRunner.class)
 public class WeatherPlaylistRestControllerTests {
 
 	private MockMvc mockMvc;
@@ -72,6 +70,17 @@ public class WeatherPlaylistRestControllerTests {
 				.andExpect(content().contentType(TestUtil.APPLICATION_JSON_UTF8))
 				.andExpect(jsonPath("currentTemperature", is(trackResult.getCurrentTemperature())))
 				.andExpect(jsonPath("tracks[0].name", is(trackResult.getTracks().get(0).getName())));
+	}
+
+	@Test
+	public void getPlayListWeatherNameBlank() throws Exception {
+		WeatherPlaylistResponse trackResult = WeatherPlaylistResponseBuilder.build().now();
+		String cityName = "London";
+		when(openWeatherSpotifyService.getPlayListByWeatherCityName(cityName)).thenReturn(trackResult);
+
+		mockMvc.perform(get("/weather-playlist/?city_name=")).andExpect(status().isBadRequest())
+				.andExpect(content().contentType(TestUtil.APPLICATION_JSON_UTF8))
+				.andExpect(jsonPath("message", is("You must provide the city name.")));
 	}
 
 	@Test

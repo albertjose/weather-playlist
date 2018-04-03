@@ -1,5 +1,7 @@
 package com.ifood.service.client;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,7 @@ import com.ifood.helper.CoordinateHelper;
 
 @Service
 public class OpenWeatherService implements WeatherService {
+	private static final Logger logger = LoggerFactory.getLogger(OpenWeatherService.class);
 
 	OpenWeatherMapClient weatherClient;
 
@@ -104,7 +107,7 @@ public class OpenWeatherService implements WeatherService {
 			if (response.getName() != null) {
 				cityNameCache.save(new CityNameCache(response.getId().toString(), response.getName()));
 			}
-			if (response.getLatitude() != null && response.getLongitude() != null) {
+			if (response.getLatitude() != null && response.getLongitude() != null && response.getId() != null) {
 				cityCoordinateCache.save(new CityCoordinateCache(response.getId().toString(),
 						CoordinateHelper.formatCoordinate(response.getLatitude(), response.getLongitude())));
 			}
@@ -118,6 +121,7 @@ public class OpenWeatherService implements WeatherService {
 		try {
 			temperature = temperatureCached != null ? Double.valueOf(temperatureCached.getTemperature()) : null;
 		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
 			temperature = null;
 		}
 		return temperature;
