@@ -2,6 +2,7 @@ package com.ifood.cache;
 
 import java.util.Optional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.repository.CrudRepository;
 
 public abstract class CacheDecorator<T> implements Cache<T> {
@@ -14,9 +15,11 @@ public abstract class CacheDecorator<T> implements Cache<T> {
 
 	@Override
 	public T find(String keyid) {
-		Optional<T> value = repository.findById(keyid);
-		if (value.isPresent()) {
-			return value.get();
+		if (StringUtils.isNotBlank(keyid)) {
+			Optional<T> value = repository.findById(keyid.toUpperCase());
+			if (value.isPresent()) {
+				return value.get();
+			}
 		}
 		return null;
 	}

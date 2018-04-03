@@ -11,5 +11,11 @@ public class CityNameCacheDecorator extends CacheDecorator<CityNameCache> {
 	protected CityNameCacheDecorator(CrudRepository<CityNameCache, String> repository) {
 		super(repository);
 	}
+	
+	@Override
+	public void save(CityNameCache cache) {
+		cache.setName(cache.getName().toUpperCase());
+		super.save(cache);
+	}
 
 }

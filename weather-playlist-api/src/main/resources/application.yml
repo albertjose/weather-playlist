@@ -4,6 +4,12 @@ server:
 info:
   component: Weather Playlist API
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
 app:
   cache:
     temperature-values: 600 # time to live in seconds
